@@ -53,6 +53,7 @@ def git(file_list):
 
     subprocess.call(f"git commit -a -m '{message}'", shell=True)
     subprocess.call("git push", shell=True)
+    subprocess.call("git request-pull", shell=True)
     return None
 
 
