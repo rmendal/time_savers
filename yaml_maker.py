@@ -13,13 +13,13 @@ import argparse
 def make_files(host_start, host_end, ip, moebius, mysql, master):
     """
     Creates and writes to the yaml files
-    :param host_start:
-    :param host_end:
-    :param ip:
-    :param moebius:
-    :param mysql:
-    :param master:
-    :return:
+    :param host_start: Starting host number
+    :param host_end: Ending host number
+    :param ip: IP Address to begin with
+    :param moebius: Include moebius line?
+    :param mysql: Include mysql line?
+    :param master: Include mysql master line?
+    :return: Nothing, just make the files as necessary
     """
     for i in range(host_start, (host_end + 1)):
         with open('fs{}.yaml'.format(i), 'a') as f:
@@ -34,7 +34,9 @@ def make_files(host_start, host_end, ip, moebius, mysql, master):
             if master is not None:
                 f.write("\nprofiles::mysql::master: true")
         ip = ip_address(ip) + 1
+
     return None
+
 
 def create_parser():
     """Self explanatory no?"""
@@ -50,7 +52,7 @@ def create_parser():
     parser.add_argument("-m", "--moebius", dest='moebius', help="Include a moebius entry", type=str,
                         required=False)
     parser.add_argument("-q", "--mysql", dest='mysql', help="Include mysql.", type=str, required=False)
-    parser.add_argument("-z", "--master", dest='master', help="Add the master line", type=str,
+    parser.add_argument("-M", "--master", dest='master', help="Add the master line", type=str,
                         required=False)
     return parser
 
@@ -62,7 +64,7 @@ def handle_args(args=None):
         parser = create_parser()
         args = parser.parse_args()
 
-    if args.host_start and args.host_end and args.ip:  # and args.moebius and args.mysql and args.master:
+    if args.host_start and args.host_end and args.ip:
         make_files(args.host_start, args.host_end, args.ip, args.moebius, args.mysql, args.master)
 
 
