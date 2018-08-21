@@ -24,7 +24,7 @@ def make_files(host_start, host_end, ip, moebius, mysql, master):
     """
     file_list = []
     for i in range(host_start, (host_end + 1)):
-        with open("fs{}.yaml".format(i), 'a') as f:
+        with open(f"fs{i}.yaml", 'a') as f:
             f.write("---\n"
                     "profiles::network::interfaces:\n"
                     "  lan:\n"
@@ -36,7 +36,7 @@ def make_files(host_start, host_end, ip, moebius, mysql, master):
             if master is not None:
                 f.write("\nprofiles::mysql::master: true")
         ip = ip_address(ip) + 1
-        file_list.append("fs{}.yaml".format(i))
+        file_list.append(f"fs{i}.yaml")
     git(file_list)
     return None
 
