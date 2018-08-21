@@ -1,4 +1,0 @@
----
-profiles::network::interfaces:
-  lan:
-    ipaddress: 10.0.0.1
