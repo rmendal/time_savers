@@ -8,6 +8,7 @@ for moebius and mysql
 
 from ipaddress import ip_address
 import argparse
+import subprocess
 
 
 def make_files(host_start, host_end, ip, moebius, mysql, master):
@@ -21,8 +22,9 @@ def make_files(host_start, host_end, ip, moebius, mysql, master):
     :param master: Include mysql master line?
     :return: Nothing, just make the files as necessary
     """
+    file_list = []
     for i in range(host_start, (host_end + 1)):
-        with open('fs{}.yaml'.format(i), 'a') as f:
+        with open("fs{}.yaml".format(i), 'a') as f:
             f.write("---\n"
                     "profiles::network::interfaces:\n"
                     "  lan:\n"
@@ -34,7 +36,23 @@ def make_files(host_start, host_end, ip, moebius, mysql, master):
             if master is not None:
                 f.write("\nprofiles::mysql::master: true")
         ip = ip_address(ip) + 1
+        file_list.append("fs{}.yaml".format(i))
+    git(file_list)
+    return None
 
+
+def git(file_list):
+    """
+    Function receives the file list from above, adds them to git, commits them and pushes the commit.
+    :param file_list: list of yaml files created in the above function.
+    :return: None
+    """
+    message = input("Enter commit message: ")
+    for i in file_list:
+        subprocess.call(f"git add {i}", shell=True)
+
+    subprocess.call(f"git commit -a -m '{message}'", shell=True)
+    subprocess.call("git push", shell=True)
     return None
 
 
