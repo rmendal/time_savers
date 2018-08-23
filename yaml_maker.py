@@ -28,7 +28,7 @@ def make_files(host_start, host_end, ip, moebius, mysql, master):
             f.write("---\n"
                     "profiles::network::interfaces:\n"
                     "  lan:\n"
-                    "    ipaddress: {}\n".format(ip_address(ip)))
+                    f"    ipaddress: {ip_address(ip)}\n")
             if moebius is not None:
                 f.write("\nprofiles::storage::moebius::moebius_version: 6.6.6-108")
             if mysql is not None:
