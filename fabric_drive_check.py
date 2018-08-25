@@ -7,10 +7,18 @@ servers you specify via flags
 """
 
 import fabric
+import getpass
 import argparse
-from invoke import Responder
 
 
+def drv_chk(host_start, host_end, site):
+    sudo_pass = getpass.getpass("Env password: ")
+    config = fabric.Config(overrides={'sudo': {'password': sudo_pass}})
+
+    for i in range (host_start, (host_end + 1)):
+        conn = fabric.Connection(f"fs{i}.bbs.{site}.cudaops.com", config=config)
+        print(f"fs{i}.bbs.{site}.cudaops.com")
+        print(conn.sudo("raiddisplay.py", pty=True))
 
 def create_parser():
     """
@@ -18,19 +26,15 @@ def create_parser():
     :return: parser
     """
 
-    parser = argparse.ArgumentParser(description="Quickly make yaml multiple files with the ip and optional "
-                                                 "mysql/moebius entries.")
+    parser = argparse.ArgumentParser(description="Log into specified hosts, find any bad drives and return the host and"
+                                                 " bad drive number.")
 
     parser.add_argument("-s", "--host-start", dest='host_start', help="Starting host number (e.g. 100)", type=int,
                         required=True)
     parser.add_argument("-e", "--host-end", dest='host_end', help="Ending host number (e.g. 103)", type=int,
                         required=True)
-    parser.add_argument("-i", "--ip", dest='ip', help="Starting ip (e.g. 10.0.0.1)", type=str, required=True)
-    parser.add_argument("-o", "--moebius", dest='moebius', help="Include a moebius entry", type=str,
-                        required=False)
-    parser.add_argument("-m", "--mysql", dest='mysql', help="Include mysql", type=str, required=False)
-    parser.add_argument("-M", "--master", dest='master', help="Add the mysql master line", type=str,
-                        required=False)
+    parser.add_argument("-S", "--site", dest='site', help="Site Abbreviation (e.g. tym)", type=str, required=True)
+
     return parser
 
 
@@ -43,8 +47,8 @@ def handle_args(args=None):
         parser = create_parser()
         args = parser.parse_args()
 
-    if args.host_start and args.host_end and args.ip:
-        make_files(args.host_start, args.host_end, args.ip, args.moebius, args.mysql, args.master)
+    if args.host_start and args.host_end and args.site:
+        drv_chk(args.host_start, args.host_end, args.site)
 
 
 if __name__ == '__main__':
