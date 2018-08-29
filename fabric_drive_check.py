@@ -6,8 +6,8 @@ Made to quickly and remotely check for failed drives after stress runs on new se
 servers you specify via flags and output any failed drives to the screen and associated hostname."
 """
 
-import fabric
-import getpass
+from fabric import Connection, Config
+from getpass import getpass
 import argparse
 from re import findall
 
@@ -21,11 +21,11 @@ def drv_chk(host_start, host_end, site):
     :param site: physical site of servers, e.g. tym
     :return: None, print info to screen
     """
-    sudo_pass = getpass.getpass("Env Password: ")
-    config = fabric.Config(overrides={'sudo': {'password': sudo_pass}})
+    sudo_pass = getpass("Env Password: ")
+    config = Config(overrides={'sudo': {'password': sudo_pass}})
     pattern = r"(\D\d+:\d+\D\s+\D\bFAIL\b\D)"
     for i in range(host_start, (host_end + 1)):
-        conn = fabric.Connection(f"fs{i}.bbs.{site}.cudaops.com", config=config)
+        conn = Connection(f"fs{i}.bbs.{site}.cudaops.com", config=config)
         rd = str(conn.sudo("raiddisplay.py", hide="stdout"))
         drv_list = findall(pattern, rd)
         drv_list = "\n".join(drv_list)
