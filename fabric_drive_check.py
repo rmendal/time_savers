@@ -3,22 +3,35 @@
 
 """
 Made to quickly and remotely check for failed drives after stress runs on new server builds. Uses Fabric to ssh into the
-servers you specify via flags
+servers you specify via flags and output any failed drives to the screen and associated hostname."
 """
 
 import fabric
 import getpass
 import argparse
+from re import findall
 
 
 def drv_chk(host_start, host_end, site):
-    sudo_pass = getpass.getpass("Env password: ")
+    """
+    Uses fabric to securely use a sudo password, ssh to each server specified with flags, run raiddisplay.py, use regex
+    to find any failed drives and print out the hostname along with any failed drives.
+    :param host_start: server number to start at
+    :param host_end: server number to end at
+    :param site: physical site of servers, e.g. tym
+    :return: None, print info to screen
+    """
+    sudo_pass = getpass.getpass("Env Password: ")
     config = fabric.Config(overrides={'sudo': {'password': sudo_pass}})
-
-    for i in range (host_start, (host_end + 1)):
+    pattern = r"(\D\d+:\d+\D\s+\D\bFAIL\b\D)"
+    for i in range(host_start, (host_end + 1)):
         conn = fabric.Connection(f"fs{i}.bbs.{site}.cudaops.com", config=config)
-        print(f"fs{i}.bbs.{site}.cudaops.com")
-        print(conn.sudo("raiddisplay.py", pty=True))
+        rd = str(conn.sudo("raiddisplay.py", hide="stdout"))
+        drv_list = findall(pattern, rd)
+        drv_list = "\n".join(drv_list)
+        print(f"fs{i}.bbs.{site}.cudaops.com\n{drv_list}")
+    return None
+
 
 def create_parser():
     """
@@ -53,4 +66,3 @@ def handle_args(args=None):
 
 if __name__ == '__main__':
     handle_args()
-
