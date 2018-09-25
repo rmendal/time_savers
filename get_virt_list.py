@@ -5,6 +5,7 @@
 I need the guests on these kvm hosts. Print them to screen."
 """
 
+from tqdm import tqdm
 from fabric import Connection, Config
 from subprocess import check_output
 from getpass import getpass
@@ -13,8 +14,9 @@ import argparse
 
 def virt_list(host_start, host_end, site):
     """
-    First we collect a sudo password. Next we ping the host to make sure it actually is alive. Not alive? Iterate to the
-    next host. Alive? SSH to it and and print out the result of virsh list --all.
+    First collect a sudo password. Next we ping the host to make sure it actually is alive. Not alive? Iterate to the
+    next host. Alive? SSH to it and and print out the result of virsh list --all. Since this requires ping I've added a
+    progress bar as it takes a bit to work through all of the hosts and otherwise looks stalled.
     :param host_start: server number to start at
     :param host_end: server number to end at
     :param site: physical site of servers, e.g. tym
@@ -22,7 +24,7 @@ def virt_list(host_start, host_end, site):
     """
     sudo_pass = getpass("Env Password: ")
     config = Config(overrides={'sudo': {'password': sudo_pass}})
-    for i in range(host_start, (host_end + 1)):
+    for i in tqdm(range(host_start, (host_end + 1)), desc="Progress:"):
         ping = check_output(["ping", "-c 4", f"vm{i}.{site}.cudaops.com"])
         ping = ping.decode("utf-8")
         if "bn-scl-redirect.cuda-inc.com" in ping:
