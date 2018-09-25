@@ -7,7 +7,7 @@ I need the guests on these kvm hosts. Print them to screen."
 
 from tqdm import tqdm
 from fabric import Connection, Config
-from subprocess import check_output
+from subprocess import run, PIPE
 from getpass import getpass
 import argparse
 
@@ -24,10 +24,10 @@ def virt_list(host_start, host_end, site):
     """
     sudo_pass = getpass("Env Password: ")
     config = Config(overrides={'sudo': {'password': sudo_pass}})
-    for i in tqdm(range(host_start, (host_end + 1)), desc="Progress:"):
-        ping = check_output(["ping", "-c 4", f"vm{i}.{site}.cudaops.com"])
-        ping = ping.decode("utf-8")
-        if "bn-scl-redirect.cuda-inc.com" in ping:
+    for i in tqdm(range(int(host_start), (host_end + 1)), desc="Progress"):
+        ping = str(run(f"ping -c 4 vm{i}.{site}.cudaops.com", shell=True, stdout=PIPE))
+        ping = ''.join(ping)
+        if "bn-scl-redirect.cuda-inc.com" in ping or "100% packet loss" in ping:
             continue
         else:
             conn = Connection(f"vm{i}.{site}.cudaops.com", config=config)
@@ -44,7 +44,7 @@ def create_parser():
 
     parser = argparse.ArgumentParser(description="Log into specified kvm hosts and print the vm list.")
 
-    parser.add_argument("-s", "--host-start", dest='host_start', help="Starting host number (e.g. 100)", type=int,
+    parser.add_argument("-s", "--host-start", dest='host_start', help="Starting host number (e.g. 100)",
                         required=True)
     parser.add_argument("-e", "--host-end", dest='host_end', help="Ending host number (e.g. 103)", type=int,
                         required=True)
