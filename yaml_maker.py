@@ -62,7 +62,7 @@ def create_parser():
     :return: parser
     """
 
-    parser = argparse.ArgumentParser(description="Quickly make yaml multiple files with the ip and optional "
+    parser = argparse.ArgumentParser(description="Quickly make multiple yaml files with the ip and optional "
                                                  "mysql/moebius entries.")
 
     parser.add_argument("-s", "--host-start", dest='host_start', help="Starting host number (e.g. 100)", type=int,
