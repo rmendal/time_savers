@@ -81,10 +81,10 @@ def create_parser():
     parser.add_argument("-e", "--host-end", dest='host_end', help="Ending host number (e.g. 103)", type=int,
                         required=True)
     parser.add_argument("-i", "--ip", dest='ip', help="Starting ip (e.g. 10.0.0.1)", type=str, required=True)
-    parser.add_argument("-o", "--moebius", dest='moebius', help="Include a moebius entry", type=str,
+    parser.add_argument("-o", "--moebius", dest='moebius', help="Include a moebius entry", action="store_true",
                         required=False)
-    parser.add_argument("-m", "--mysql", dest='mysql', help="Include mysql", type=str, required=False)
-    parser.add_argument("-M", "--master", dest='master', help="Add the mysql master line", type=str,
+    parser.add_argument("-m", "--mysql", dest='mysql', help="Include mysql", action="store_true", required=False)
+    parser.add_argument("-M", "--master", dest='master', help="Add the mysql master line", action="store_true",
                         required=False)
     return parser
 
