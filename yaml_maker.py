@@ -47,12 +47,23 @@ def git(file_list):
     :param file_list: list of yaml files created in the above function.
     :return: None
     """
+    n = 0
     message = input("Enter commit message: ")
     for i in file_list:
         subprocess.call(f"git add {i}", shell=True)
+    subprocess.call("git status", shell=True)
 
-    subprocess.call(f"git commit -a -m '{message}'", shell=True)
-    subprocess.call("git push", shell=True)
+    while n < 1:
+        stat = input("Does the status look right? (y/n) ").lower()
+        if stat == "y" or stat == "yes":
+            subprocess.call(f"git commit -a -m '{message}'", shell=True)
+            subprocess.call("git push", shell=True)
+            n += 1
+        elif stat == "n" or stat == "no":
+            print("Exiting...")
+            n += 1
+        else:
+            print("Sorry I didn't get that...")
     return None
 
 
