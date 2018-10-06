@@ -80,9 +80,9 @@ def create_parser():
                                                  "perform a git add, commit, status and if ok'd by you, will push your "
                                                  "changes to the repo.")
 
-    parser.add_argument("-s", "--host-start", dest="host_start", help="starting host number (e.g. 100)", type=str,
+    parser.add_argument("-s", "--start", dest="host_start", help="starting host number (e.g. 100)", type=str,
                         required=True)
-    parser.add_argument("-e", "--host-end", dest="host_end", help="ending host number (e.g. 103)", type=int,
+    parser.add_argument("-e", "--end", dest="host_end", help="ending host number (e.g. 103)", type=int,
                         required=True)
     parser.add_argument("-t", "--svr", dest="svr", help="server type (i.e. fs, db, etc). Default is 'fs'", type=str,
                         required=False, default="fs")
