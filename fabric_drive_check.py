@@ -24,7 +24,7 @@ def drv_chk(host_start, host_end, site):
     sudo_pass = getpass("Env Password: ")
     config = Config(overrides={'sudo': {'password': sudo_pass}})
     pattern = r"(\D\d+:\d+\D\s+\D\bFAIL\b\D)"
-    for i in range(host_start, (host_end + 1)):
+    for i in range(int(host_start), (host_end + 1)):
         conn = Connection(f"fs{i}.bbs.{site}.cudaops.com", config=config)
         rd = str(conn.sudo("raiddisplay.py", hide="stdout"))
         drv_list = findall(pattern, rd)
@@ -40,9 +40,9 @@ def create_parser():
     """
 
     parser = argparse.ArgumentParser(description="Log into specified hosts, find any bad drives and return the host and"
-                                                 " bad drive number.")
+                                                 " bad drive enclosure/number.\nAll flags are required.")
 
-    parser.add_argument("-s", "--host-start", dest='host_start', help="Starting host number (e.g. 100)", type=int,
+    parser.add_argument("-s", "--host-start", dest='host_start', help="Starting host number (e.g. 100)", type=str,
                         required=True)
     parser.add_argument("-e", "--host-end", dest='host_end', help="Ending host number (e.g. 103)", type=int,
                         required=True)

@@ -51,7 +51,7 @@ def create_parser():
 
     parser = argparse.ArgumentParser(description="Log into specified kvm hosts and print the vm list.")
 
-    parser.add_argument("-s", "--host-start", dest='host_start', help="Starting host number (e.g. 100)",
+    parser.add_argument("-s", "--host-start", dest='host_start', help="Starting host number (e.g. 100)", type=str,
                         required=True)
     parser.add_argument("-e", "--host-end", dest='host_end', help="Ending host number (e.g. 103)", type=int,
                         required=True)
