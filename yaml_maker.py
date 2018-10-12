@@ -31,7 +31,7 @@ def make_files(host_start, host_end, ip, moebius, mysql, master, svr):
                     "  lan:\n"
                     f"    ipaddress: {ip_address(ip)}\n")
             if moebius is True:
-                f.write("\nprofiles::storage::moebius::moebius_version: 6.6.6-108")
+                f.write("\nprofiles::storage::moebius")
             if mysql is True:
                 f.write("\nbbs::fileserver::enabledb_metadata_cluster: true")
             if master is True:
