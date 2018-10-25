@@ -27,7 +27,7 @@ def virt_list(host_start, host_end, site):
     sudo_pass = getpass("Env Password: ")
     config = Config(overrides={'sudo': {'password': sudo_pass}})
     for i in tqdm(range(int(host_start), (host_end + 1)), desc="Progress"):
-        dig = str(run(f"dig +short vm{i}.{site}.cudaops.com", shell=True, stdout=PIPE))
+        dig = str(run(f"dig +short vm{i}.bco.{site}.cudaops.com", shell=True, stdout=PIPE))
         dig = ''.join(dig)
         if "stdout=b''" in dig:
             continue
@@ -35,7 +35,7 @@ def virt_list(host_start, host_end, site):
             ping = str(run(f"ping -c 4 vm{i}.{site}.cudaops.com", shell=True, stdout=PIPE))
             ping = ''.join(ping)
             if "bn-scl-redirect.cuda-inc.com" in ping or "100% packet loss" in ping:
-                    continue
+                continue
             else:
                 conn = Connection(f"vm{i}.{site}.cudaops.com", config=config)
                 virsh_all = str(conn.sudo("virsh list --all", hide="stdout"))
