@@ -90,8 +90,8 @@ def create_vm(name, ram, vcpus, brint, lv_boot, lv_data, lv_log):
     print("\nCreating the guest...")
     subprocess.call("virt-install --autostart --connect qemu:///system --network bridge={} --graphics none "
                     "--name={} --ram={} --vcpus={},maxvcpus={} --os-type=linux --os-variant=rhel7 --cpu host "
-                    "--location http://portage-dist.bitleap.net/centos/ "
-                    "--extra-args 'ks=http://portage-dist.bitleap.net/kickstart/el7/virtual/cuda_kickstart.cfg "
+                    "--location link-to-kickstart-image "
+                    "--extra-args 'ks=link-to-kickstart.cfg "
                     "ip=dhcp console=tty0 console=ttyS0,115200n8' --noautoconsole "
                     "--disk /dev/{}/{},bus=virtio,sparse=false,cache=none,io=native "
                     "--disk /dev/{}/{}-data,bus=virtio,sparse=false,cache=none,io=native "
@@ -120,8 +120,7 @@ def create_vm(name, ram, vcpus, brint, lv_boot, lv_data, lv_log):
         exit("\nSetting autostart failed.\n\nGoodbye...")
 
     print("""\nCreation of {} completed. Guest will finish installation and shut down. Once it's shut down you can
-          start it up (virsh start {}) and connect to it (virsh console {}). Log in with root. The default root password
-          is in Device42 under 'Kickstart Default Password': https://device42.cudaops.com/admin/rowmgmt/password/5419/
+          start it up (virsh start {}) and connect to it (virsh console {}). Log in with root.
           """).format(name, name, name)
 
     return None

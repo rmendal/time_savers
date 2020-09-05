@@ -25,11 +25,11 @@ def drv_chk(host_start, host_end, site):
     config = Config(overrides={'sudo': {'password': sudo_pass}})
     pattern = r"(\D\d+:\d+\D\s+\D\bFAIL\b\D)"
     for i in range(int(host_start), (host_end + 1)):
-        conn = Connection(f"fs{i}.bbs.{site}.cudaops.com", config=config)
+        conn = Connection(f"fs{i}.product.{site}.domain.com", config=config)
         rd = str(conn.sudo("raiddisplay.py", hide="stdout"))
         drv_list = findall(pattern, rd)
         drv_list = "\n".join(drv_list)
-        print(f"fs{i}.bbs.{site}.cudaops.com\n{drv_list}")
+        print(f"fs{i}.product.{site}.domain.com\n{drv_list}")
     return None
 
 

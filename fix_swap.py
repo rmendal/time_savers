@@ -20,7 +20,7 @@ def fix_swap(host_type, host_start, host_end, site):
     sudo_pass = getpass("Env Password: ")
     config = Config(overrides={'sudo': {'password': sudo_pass}})
     for i in tqdm(range(int(host_start), (host_end + 1)), desc="Progress"):
-        conn = Connection(f"{host_type}{i}.bbs.{site}.cudaops.com", config=config)
+        conn = Connection(f"{host_type}{i}.product.{site}.domain.com", config=config)
         mk_swp = str(conn.sudo("mkswap /dev/sda3", hide="stdout"))
         swp_on = str(conn.sudo("swapon /dev/sda3", hide="stdout"))
         print(mk_swp, "\n", swp_on)

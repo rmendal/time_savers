@@ -19,7 +19,7 @@ def func():
     """
     sudo_pass = getpass("Env Password: ")
     config = Config(overrides={'sudo': {'password': sudo_pass}})
-    conn = Connection(f"vm{i}.{site}.cudaops.com", config=config)
+    conn = Connection(f"vm{i}.{site}.domain.com", config=config)
     virsh_all = str(conn.sudo("virsh list --all", hide="stdout"))
     return None
 

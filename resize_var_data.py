@@ -23,7 +23,7 @@ def resize(host_start, host_end, site):
     config = Config(overrides={'sudo': {'password': sudo_pass}})
     confirm = Responder(pattern=r"Do you really want to reduce vg0/var_data? \[y\/n\]:", response="y\n")
     for i in range(int(host_start), (host_end + 1)):
-        conn = Connection(f"vm{i}.bco.{site}.cudaops.com", config=config)
+        conn = Connection(f"vm{i}.product.{site}.domain.com", config=config)
         conn.sudo("systemctl stop node_exporter.service")
         conn.sudo("mv /var/data/node_exporter /var/tmp/")
         conn.sudo("umount /var/data")

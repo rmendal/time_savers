@@ -18,12 +18,12 @@ def add_sumo(ip, site):
     :param site: Physical site identifier
     :return: Nothing, just make the files as necessary
     """
-    with open("/home/rob/Desktop/tym_file.txt", "r") as f:
+    with open("file.txt", "r") as f:
         servers = f.readlines()
         servers = [i.strip("\n") for i in servers]
 
     for i in servers:
-        with open(f"bbs_staging/extdata/fqdn/bbs.{site}.cudaops.com/{i}", "a") as f:
+        with open(f"staging/extdata/fqdn/product.{site}.domain.com/{i}", "a") as f:
             f.write(f"\n# Sumo Logic config\n"
                     f"syslog_sumo_proto,tcp\n"
                     f"syslog_sumo_ip_address,{ip}\n"
